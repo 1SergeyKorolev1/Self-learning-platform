@@ -25,6 +25,7 @@ class Course(models.Model):
         verbose_name = "Курс"
         verbose_name_plural = "Курсы"
 
+
 class Lesson(models.Model):
     name = models.CharField(
         max_length=150, verbose_name="Название", help_text="Введите название урока"
@@ -36,6 +37,37 @@ class Lesson(models.Model):
         verbose_name="Курс",
         help_text="Укажите курс",
         related_name="lesson",
+        **NULLABLE,
+    )
+    owner = models.ForeignKey(
+        AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        verbose_name="владелец",
+        help_text="Укажите владельца",
+        **NULLABLE,
+    )
+
+
+class Test(models.Model):
+    name = models.CharField(
+        max_length=150,
+        verbose_name="Название",
+        help_text="Введите название теста"
+    )
+    description = models.TextField(
+        verbose_name="Описание вопроса",
+        help_text="Укажите Описание вопроса",
+        **NULLABLE)
+    correct_answer = models.TextField(
+        verbose_name="Правильный ответ",
+        help_text="Укажите Правильный ответ",
+        **NULLABLE)
+    lesson = models.ForeignKey(
+        Lesson,
+        on_delete=models.CASCADE,
+        verbose_name="Курс",
+        help_text="Укажите урок",
+        related_name="test",
         **NULLABLE,
     )
     owner = models.ForeignKey(
