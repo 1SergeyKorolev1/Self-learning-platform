@@ -37,7 +37,6 @@ class Lesson(models.Model):
         verbose_name="Курс",
         help_text="Укажите курс",
         related_name="lesson",
-        **NULLABLE,
     )
     owner = models.ForeignKey(
         AUTH_USER_MODEL,
@@ -46,6 +45,13 @@ class Lesson(models.Model):
         help_text="Укажите владельца",
         **NULLABLE,
     )
+
+    def __str__(self):
+        return f"{self.name}"
+
+    class Meta:
+        verbose_name = "Урок"
+        verbose_name_plural = "Уроки"
 
 
 class Test(models.Model):
@@ -57,18 +63,16 @@ class Test(models.Model):
     description = models.TextField(
         verbose_name="Описание вопроса",
         help_text="Укажите Описание вопроса",
-        **NULLABLE)
+    )
     correct_answer = models.TextField(
         verbose_name="Правильный ответ",
-        help_text="Укажите Правильный ответ",
-        **NULLABLE)
+        help_text="Укажите Правильный ответ",)
     lesson = models.ForeignKey(
         Lesson,
         on_delete=models.CASCADE,
         verbose_name="Курс",
         help_text="Укажите урок",
         related_name="test",
-        **NULLABLE,
     )
     owner = models.ForeignKey(
         AUTH_USER_MODEL,
@@ -77,3 +81,39 @@ class Test(models.Model):
         help_text="Укажите владельца",
         **NULLABLE,
     )
+
+    def __str__(self):
+        return f"{self.name}"
+
+    class Meta:
+        verbose_name = "Тест"
+        verbose_name_plural = "Тесты"
+
+class AttemptAnswer(models.Model):
+    answer = models.TextField(
+        verbose_name="Попытка ответа",
+        help_text="Укажите ваш ответ",
+    )
+    answer_bool = models.BooleanField(verbose_name="Правильно/Неправильно", **NULLABLE)
+    test = models.ForeignKey(
+        Test,
+        on_delete=models.CASCADE,
+        verbose_name="Тест",
+        help_text="Укажите тест",
+        related_name="attempt_answer",
+    )
+    owner = models.ForeignKey(
+        AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        verbose_name="владелец",
+        help_text="Укажите владельца",
+        **NULLABLE,
+    )
+
+    def __str__(self):
+        return f"{self.name}"
+
+    class Meta:
+        verbose_name = "Попытка ответа"
+        verbose_name_plural = "Попытки ответа"
+
