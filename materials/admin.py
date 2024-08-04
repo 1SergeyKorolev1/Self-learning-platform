@@ -16,4 +16,4 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(AttemptAnswer)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ("pk", )
+    list_display = ("pk", "answer", "answer_bool")

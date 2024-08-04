@@ -111,7 +111,7 @@ class AttemptAnswer(models.Model):
     )
 
     def __str__(self):
-        return f"{self.name}"
+        return f"{self.answer}"
 
     class Meta:
         verbose_name = "Попытка ответа"
