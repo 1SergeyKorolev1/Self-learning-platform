@@ -1,5 +1,7 @@
+import django
 from rest_framework.serializers import ValidationError
 from materials.models import Course
+
 
 class Validate:
 
@@ -8,8 +10,20 @@ class Validate:
         self.obj = obj
 
     def validate_lesson(self):
-        if self.user != self.obj.course.owner or self.user.groups.filter(name="moderator"):
+        object_group_set = self.user.groups.filter(name="moderator")
+        check_bool = False
+        if len(object_group_set) == 0:
+            check_bool = False
+        else:
+            object_group = self.user.groups.get(name="moderator")
+            if object_group:
+                check_bool = str(object_group) == "moderator"
+        if self.user == self.obj.course.owner or check_bool:
+            pass
+        else:
             raise ValidationError('Вы должны быть владельцем курса к которому '
                                   'создаете данный урок. - или модератором! '
                                   f'Вы - {self.user}. '
                                   f'Владелец курса - {self.obj.course.owner}')
+
+
