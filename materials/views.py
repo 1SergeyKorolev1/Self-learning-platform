@@ -9,11 +9,6 @@ class CourseViewSet(ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
 
-    def perform_create(self, serializer):
-        course = serializer.save()
-        course.owner = self.request.user
-        course.save()
-
     def get_permissions(self):
         if self.action in "create":
             self.permission_classes = (IsModerator,)
@@ -36,7 +31,7 @@ class LessonViewSet(ModelViewSet):
     def get_permissions(self):
         if self.action in "create":
             self.permission_classes = (IsModerator,)
-        elif self.action in "update":
+        elif self.action in ["partial_update", "update"]:
             self.permission_classes = (IsModerator | IsOwner,)
         elif self.action == "destroy":
             self.permission_classes = (IsModerator | IsOwner,)

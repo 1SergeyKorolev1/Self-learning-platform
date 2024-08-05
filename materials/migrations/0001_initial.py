@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(help_text='Введите название курса', max_length=255, verbose_name='Название')),
                 ('description', models.TextField(blank=True, null=True, verbose_name='Описание')),
-                ('owner', models.ForeignKey(blank=True, help_text='Укажите владельца', null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL, verbose_name='владелец')),
+                ('owner', models.ForeignKey(help_text='Укажите владельца', on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL, verbose_name='владелец')),
             ],
             options={
                 'verbose_name': 'Курс',
