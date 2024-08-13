@@ -2,7 +2,7 @@ from rest_framework.viewsets import ModelViewSet, generics
 from materials.models import Course, Lesson, Test
 from materials.serializers import (CourseSerializer, LessonSerializer,
                                    TestSerializer, AttemptAnswerSerializer)
-from users.permissions import IsModerator, IsOwner
+from users.permissions import IsModerator, IsOwner, IsTeacher
 from materials.validators import Validate
 
 
@@ -10,9 +10,14 @@ class CourseViewSet(ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
 
+    def perform_create(self, serializer):
+        course = serializer.save()
+        course.owner = self.request.user
+        course.save()
+
     def get_permissions(self):
         if self.action in "create":
-            self.permission_classes = (IsModerator,)
+            self.permission_classes = (IsModerator | IsTeacher,)
         elif self.action in ["partial_update", "update"]:
             self.permission_classes = (IsModerator | IsOwner,)
         elif self.action == "destroy":
